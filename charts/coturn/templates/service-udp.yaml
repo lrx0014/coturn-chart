@@ -15,10 +15,16 @@ spec:
       port: {{ .Values.coturn.ports.listening }}
       protocol: UDP
       targetPort: {{ .Values.coturn.ports.listening }}
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.udp }}
+      nodePort: {{ .Values.service.nodePorts.udp }}
+      {{- end }}
     - name: turn-udp-dtls
       port: {{ .Values.coturn.ports.tlsListening }}
       protocol: UDP
       targetPort: {{ .Values.coturn.ports.tlsListening }}
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePorts.dtls }}
+      nodePort: {{ .Values.service.nodePorts.dtls }}
+      {{- end }}
   selector:
     app.kubernetes.io/name: {{ .Release.Name }}-coturn
     app.kubernetes.io/instance: {{ .Release.Name }}
